@@ -549,3 +549,222 @@ WITH order_totals AS (
 SELECT
     ROUND(AVG(order_sales), 2) AS actual_average_order_value
 FROM order_totals;
+
+
+
+/*
+=========================================
+SECTION 8
+Final Advanced Analysis
+=========================================
+*/
+
+
+-- =====================================
+-- Question 23
+-- How do sub-categories rank by total profit?
+
+-- Key Findings:
+-- 1. Copiers rank as the most profitable sub-category.
+-- 2. Phones and Accessories rank second and third.
+-- 3. Tables rank last due to overall negative profit.
+--
+-- Business Insight:
+-- Ranking functions make it easier to compare business
+-- performance and identify the strongest and weakest
+-- performing product groups.
+-- =====================================
+
+WITH subcategory_profit AS (
+    SELECT
+        sub_category,
+        ROUND(SUM(profit), 2) AS total_profit
+    FROM superstore_orders
+    GROUP BY sub_category
+)
+
+SELECT
+    sub_category,
+    total_profit,
+    RANK() OVER (ORDER BY total_profit DESC) AS profit_rank
+FROM subcategory_profit
+ORDER BY profit_rank;
+
+
+
+-- =====================================
+-- Question 24
+-- Which product generates the highest sales within each category?
+
+-- Key Findings:
+-- Technology:
+-- Canon imageCLASS 2200 Advanced Copier
+--
+-- Office Supplies:
+-- Fellowes PB500 Electric Punch Plastic Comb Binding Machine
+--
+-- Furniture:
+-- HON 5400 Series Task Chairs
+--
+-- Business Insight:
+-- Identifying the highest-selling product within each category
+-- helps businesses prioritize inventory and marketing efforts.
+
+-- =====================================
+
+WITH product_sales AS (
+    SELECT
+        category,
+        product_name,
+        ROUND(SUM(sales), 2) AS total_sales
+    FROM superstore_orders
+    GROUP BY category, product_name
+),
+ranked_products AS (
+    SELECT
+        category,
+        product_name,
+        total_sales,
+        ROW_NUMBER() OVER (
+            PARTITION BY category
+            ORDER BY total_sales DESC
+        ) AS product_rank
+    FROM product_sales
+)
+
+SELECT
+    category,
+    product_name,
+    total_sales
+FROM ranked_products
+WHERE product_rank = 1
+ORDER BY total_sales DESC;
+
+
+
+
+-- =====================================
+-- Question 25
+-- How have monthly sales changed over time?
+
+-- Key Findings:
+-- Monthly sales fluctuate throughout the year,
+-- with noticeable seasonal increases during several
+-- months across the dataset.
+--
+-- Business Insight:
+-- Monthly trend analysis allows management to identify
+-- seasonal demand and improve inventory planning.
+-- =====================================
+
+SELECT
+    DATE_TRUNC('month', order_date)::date AS order_month,
+    ROUND(SUM(sales), 2) AS total_sales,
+    ROUND(SUM(profit), 2) AS total_profit
+FROM superstore_orders
+GROUP BY DATE_TRUNC('month', order_date)
+ORDER BY order_month;
+
+
+
+
+-- =====================================
+-- Question 26
+-- How does discount level affect profitability?
+
+-- Key Findings:
+-- • No Discount generated the highest profit.
+-- • Low Discount remained profitable.
+-- • Medium Discount resulted in an overall loss.
+-- • High Discount produced the largest overall loss.
+--
+-- Business Insight:
+-- Large discounts significantly reduce profitability.
+-- The business should carefully evaluate discount
+-- strategies before increasing promotional offers.
+
+-- =====================================
+
+SELECT
+    CASE
+        WHEN discount = 0 THEN 'No Discount'
+        WHEN discount <= 0.20 THEN 'Low Discount'
+        WHEN discount <= 0.40 THEN 'Medium Discount'
+        ELSE 'High Discount'
+    END AS discount_level,
+    COUNT(*) AS line_items,
+    ROUND(SUM(sales), 2) AS total_sales,
+    ROUND(SUM(profit), 2) AS total_profit
+FROM superstore_orders
+GROUP BY
+    CASE
+        WHEN discount = 0 THEN 'No Discount'
+        WHEN discount <= 0.20 THEN 'Low Discount'
+        WHEN discount <= 0.40 THEN 'Medium Discount'
+        ELSE 'High Discount'
+    END
+ORDER BY total_profit DESC;
+
+
+
+-- =====================================
+-- Question 27
+-- Which categories have the strongest profit margins?
+
+-- Key Findings:
+-- Technology: 17.40%
+-- Office Supplies: 17.04%
+-- Furniture: 2.49%
+--
+-- Business Insight:
+-- Furniture generates substantial revenue but has a
+-- much lower profit margin than the other categories
+
+-- =====================================
+
+SELECT
+    category,
+    ROUND(SUM(sales), 2) AS total_sales,
+    ROUND(SUM(profit), 2) AS total_profit,
+    ROUND(
+        100.0 * SUM(profit) / NULLIF(SUM(sales), 0),
+        2
+    ) AS profit_margin_percent
+FROM superstore_orders
+GROUP BY category
+ORDER BY profit_margin_percent DESC;
+
+
+
+-- =====================================
+-- Question 28
+-- How do shipping modes compare by sales and profit?
+-- Key Findings:
+--  Standard Class handled the highest number of orders and
+--  generated the highest total sales and profit.
+
+--  First Class achieved the highest profit margin (13.93%)
+
+--  Same Day shipping generated the fewest orders
+--
+-- Business Insight:
+-- Standard Class is the primary shipping method and drives
+-- the majority of revenue. 
+-- First Class produces the strongest profit margin, 
+-- suggesting premium shipping may provide
+-- greater profitability despite lower sales volume.
+
+-- =====================================
+
+SELECT
+    ship_mode,
+    COUNT(DISTINCT order_id) AS total_orders,
+    ROUND(SUM(sales), 2) AS total_sales,
+    ROUND(SUM(profit), 2) AS total_profit,
+    ROUND(
+        100.0 * SUM(profit) / NULLIF(SUM(sales), 0),
+        2
+    ) AS profit_margin_percent
+FROM superstore_orders
+GROUP BY ship_mode
+ORDER BY total_profit DESC;
