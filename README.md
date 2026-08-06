@@ -12,6 +12,7 @@ The objective is to demonstrate practical SQL skills while producing meaningful 
 
 ---
 
+
 # 🛠️ Tools Used
 
 - PostgreSQL
@@ -20,6 +21,27 @@ The objective is to demonstrate practical SQL skills while producing meaningful 
 - Visual Studio Code
 - Git
 - GitHub
+
+---
+
+
+# 📷 Project Preview
+
+## SQL Query Example
+
+![SQL Query Example](images/sql_query_example.png)
+
+---
+
+## Business Results
+
+![Discount Analysis](images/discount_analysis.png)
+
+---
+
+## Repository Structure
+
+![Project Structure](images/project_structure.png)
 
 ---
 
@@ -178,8 +200,7 @@ Retail-Sales-Analytics/
 
 **Rahim Manji**
 
-GitHub:
-https://github.com/RManji910
+GitHub:  https://github.com/RManji910
 
 ---
 

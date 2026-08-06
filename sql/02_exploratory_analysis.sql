@@ -9,9 +9,10 @@ Author: Rahim Manji
 
 
 -- =====================================
--- Question 1
--- How many orders are in the dataset?
--- Answer: 9,994
+/* Question 1
+- How many orders are in the dataset?
+- Answer: 9,994
+*/
 -- =====================================
 
 SELECT COUNT(*) AS total_orders
@@ -20,10 +21,11 @@ FROM superstore_orders;
 
 
 -- =====================================
--- Question 2
--- What are the total sales?
--- Answer: $2,297,201.07
+/* Question 2
+-  What are the total sales?
+-  Answer: $2,297,201.07
 -- =====================================
+*/
 
 SELECT
     ROUND(SUM(sales),2) AS total_sales
@@ -77,19 +79,20 @@ Regional Performance
 */
 
 -- =====================================
--- Question 6
--- Which regions generate the highest sales?
---
--- Answer:
--- 1. West    - $725,457.93
--- 2. East    - $678,781.36
--- 3. Central - $501,239.88
--- 4. South   - $391,721.90
---
--- Business Insight:
--- The West region generates the highest revenue, while the South
--- generates the lowest sales.
+/* Question 6
+- Which regions generate the highest sales?
+
+ Answer:
+ 1. West    - $725,457.93
+ 2. East    - $678,781.36
+ 3. Central - $501,239.88
+ 4. South   - $391,721.90
+
+Business Insight:
+- The West region generates the highest revenue, while the South
+- generates the lowest sales.
 -- =====================================
+*/
 
 SELECT
     region,
@@ -212,17 +215,18 @@ Sub- Category Performance
 -- =====================================
 -- Question 11
 -- Which sub-categories generate the highest sales?
---
--- Key Findings:
--- 1. Phones    - $330,007.10
--- 2. Chairs    - $328,449.13
--- 3. Storage   - $223,843.59
--- 4. Tables    - $206,965.68
--- 5. Binders   - $203,412.77
---
--- Business Insight:
--- Phones and Chairs generate the highest sales among all
--- sub-categories and are major revenue drivers.
+/*
+   Key Findings:
+   1. Phones    - $330,007.10
+   2. Chairs    - $328,449.13
+   3. Storage   - $223,843.59
+   4. Tables    - $206,965.68
+   5. Binders   - $203,412.77
+
+   Business Insight:
+   - Phones and Chairs generate the highest sales among all
+     sub-categories and are major revenue drivers.
+*/
 -- =====================================
 
 SELECT
