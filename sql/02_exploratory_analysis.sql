@@ -198,3 +198,354 @@ SELECT
 FROM superstore_orders
 GROUP BY category
 ORDER BY total_profit DESC;
+
+
+
+/*
+=========================================
+SECTION 4
+Sub- Category Performance
+=========================================
+*/
+
+
+-- =====================================
+-- Question 11
+-- Which sub-categories generate the highest sales?
+--
+-- Key Findings:
+-- 1. Phones    - $330,007.10
+-- 2. Chairs    - $328,449.13
+-- 3. Storage   - $223,843.59
+-- 4. Tables    - $206,965.68
+-- 5. Binders   - $203,412.77
+--
+-- Business Insight:
+-- Phones and Chairs generate the highest sales among all
+-- sub-categories and are major revenue drivers.
+-- =====================================
+
+SELECT
+    sub_category,
+    ROUND(SUM(sales), 2) AS total_sales
+FROM superstore_orders
+GROUP BY sub_category
+ORDER BY total_sales DESC;
+
+
+
+-- =====================================
+-- Question 12
+-- Which sub-categories generate the highest profit?
+--
+-- Key Findings:
+-- 1. Copiers     - $55,617.90
+-- 2. Phones      - $44,516.25
+-- 3. Accessories - $41,936.78
+-- 4. Paper       - $34,053.34
+-- 5. Binders     - $30,221.64
+--
+-- Business Insight:
+-- Copiers generate the highest profit despite ranking
+-- lower in total sales, indicating excellent profit margins.
+-- =====================================
+
+SELECT
+    sub_category,
+    ROUND(SUM(profit), 2) AS total_profit
+FROM superstore_orders
+GROUP BY sub_category
+ORDER BY total_profit DESC;
+
+
+
+-- =====================================
+-- Question 13
+-- Which sub-categories lose the most money?
+--
+-- Key Findings:
+-- 1. Tables     - -$17,725.59
+-- 2. Bookcases  - -$3,472.56
+-- 3. Supplies   - -$1,188.99
+--
+-- Business Insight:
+-- Tables generate strong sales but produce the largest
+-- overall loss. This sub-category should be investigated
+-- for pricing, discounts, or operating costs.
+-- =====================================
+
+SELECT
+    sub_category,
+    ROUND(SUM(profit), 2) AS total_profit
+FROM superstore_orders
+GROUP BY sub_category
+ORDER BY total_profit ASC;
+
+
+
+/*
+=========================================
+SECTION 5
+Customer Analysis
+=========================================
+*/
+
+-- =====================================
+-- Question 14
+-- Who are the top 10 customers by total sales?
+--
+-- Key Findings:
+-- 1. Sean Miller        - $25,043.07
+-- 2. Tamara Chand       - $19,052.22
+-- 3. Raymond Buch       - $15,117.35
+-- 4. Tom Ashbrook       - $14,595.62
+-- 5. Adrian Barton      - $14,473.57
+--
+-- Business Insight:
+-- A relatively small number of customers generate a significant
+-- amount of revenue. These customers are valuable relationships
+-- that the business should retain.
+-- =====================================
+
+SELECT
+    customer_name,
+    ROUND(SUM(sales), 2) AS total_sales
+FROM superstore_orders
+GROUP BY customer_name
+ORDER BY total_sales DESC
+LIMIT 10;
+
+
+
+
+-- =====================================
+-- Question 15
+-- Who are the top 10 customers by total profit?
+--
+-- Key Findings:
+-- 1. Tamara Chand      - $8,981.32
+-- 2. Raymond Buch      - $6,976.09
+-- 3. Sanjit Chand      - $5,757.42
+-- 4. Hunter Lopez      - $5,622.43
+-- 5. Adrian Barton     - $5,444.81
+--
+-- Business Insight:
+-- The highest spending customer is not necessarily the most
+-- profitable customer. Businesses should evaluate customers
+-- based on profitability as well as revenue.
+-- =====================================
+
+SELECT
+    customer_name,
+    ROUND(SUM(profit), 2) AS total_profit
+FROM superstore_orders
+GROUP BY customer_name
+ORDER BY total_profit DESC
+LIMIT 10;
+
+
+
+-- =====================================
+-- Question 16
+-- Which customers generated an overall loss?
+--
+-- Key Findings:
+-- 1. Cindy Stewart    - -$6,626.37
+-- 2. Grant Thornton   - -$4,108.66
+-- 3. Luke Foster      - -$3,583.97
+--
+-- Business Insight:
+-- Some customers generate overall losses despite making
+-- purchases. The company should investigate pricing,
+-- discounts, or return patterns for these customers.
+-- =====================================
+
+SELECT
+    customer_name,
+    ROUND(SUM(profit), 2) AS total_profit
+FROM superstore_orders
+GROUP BY customer_name
+HAVING SUM(profit) < 0
+ORDER BY total_profit ASC
+LIMIT 10;
+
+
+
+/*
+=========================================
+SECTION 6
+Geographic & Business Performance
+=========================================
+*/
+
+
+-- =====================================
+-- Question 17
+-- Which states generate the highest sales?
+--
+-- Key Findings:
+-- 1. California   - $457,687.68
+-- 2. New York     - $310,876.20
+-- 3. Texas        - $170,187.98
+-- 4. Washington   - $138,641.29
+-- 5. Pennsylvania - $116,512.02
+--
+-- Business Insight:
+-- California is the company's largest market by revenue,
+-- generating significantly more sales than any other state.
+-- =====================================
+
+SELECT
+    state,
+    ROUND(SUM(sales), 2) AS total_sales
+FROM superstore_orders
+GROUP BY state
+ORDER BY total_sales DESC
+LIMIT 10;
+
+
+
+
+-- =====================================
+-- Question 18
+-- Which states generate the highest profit?
+--
+-- Key Findings:
+-- 1. California - $76,381.60
+-- 2. New York   - $74,038.64
+-- 3. Washington - $33,402.70
+-- 4. Michigan   - $24,463.15
+-- 5. Virginia   - $18,598.00
+--
+-- Business Insight:
+-- California and New York are the company's most profitable
+-- states, making them important markets for continued investment.
+-- =====================================
+
+SELECT
+    state,
+    ROUND(SUM(profit), 2) AS total_profit
+FROM superstore_orders
+GROUP BY state
+ORDER BY total_profit DESC
+LIMIT 10;
+
+
+
+
+-- =====================================
+-- Question 19
+-- Which states lose the most money?
+--
+-- Key Findings:
+-- 1. Texas        - -$25,729.29
+-- 2. Ohio         - -$16,971.37
+-- 3. Pennsylvania - -$15,560.04
+-- 4. Illinois     - -$12,607.89
+-- 5. North Carolina - -$7,490.81
+--
+-- Business Insight:
+-- Texas generates high sales but also records the largest
+-- overall loss, suggesting pricing, discounting, or cost
+-- management issues in that market.
+-- =====================================
+
+SELECT
+    state,
+    ROUND(SUM(profit), 2) AS total_profit
+FROM superstore_orders
+GROUP BY state
+ORDER BY total_profit ASC
+LIMIT 10;
+
+
+
+
+/*
+=========================================
+SECTION 7
+Advanced Business Analysis
+=========================================
+*/
+
+-- =====================================
+-- Question 20
+-- How can states be classified by profitability?
+
+-- Key Findings:
+-- • California, New York, and Washington are classified as High Profit states.
+-- • Several states fall into the Moderate Profit category.
+-- • A number of states are classified as Low Profit or Loss-Making.
+--
+-- Business Insight:
+-- CASE statements make it easier to categorize business performance
+-- instead of reviewing raw numbers. This helps managers quickly
+-- identify high-performing and underperforming markets.
+
+-- =====================================
+
+SELECT
+    state,
+    ROUND(SUM(sales), 2) AS total_sales,
+    ROUND(SUM(profit), 2) AS total_profit,
+    CASE
+        WHEN SUM(profit) < 0 THEN 'Loss-Making'
+        WHEN SUM(profit) < 10000 THEN 'Low Profit'
+        WHEN SUM(profit) < 30000 THEN 'Moderate Profit'
+        ELSE 'High Profit'
+    END AS profitability_status
+FROM superstore_orders
+GROUP BY state
+ORDER BY total_profit DESC;
+
+
+
+-- =====================================
+-- Question 21
+-- How have sales and profit changed by year?
+
+-- Key Findings:
+-- 2014 - Sales: $484,247.56 | Profit: $49,544.06
+-- 2015 - Sales: $470,532.46 | Profit: $61,618.69
+-- 2016 - Sales: $609,205.86 | Profit: $81,795.27
+-- 2017 - Sales: $733,215.19 | Profit: $93,439.77
+--
+-- Business Insight:
+-- Both sales and profit increased substantially over time.
+-- 2017 was the company's strongest year in both revenue
+-- and profitability.
+-- =====================================
+
+SELECT
+    EXTRACT(YEAR FROM order_date) AS order_year,
+    ROUND(SUM(sales), 2) AS total_sales,
+    ROUND(SUM(profit), 2) AS total_profit
+FROM superstore_orders
+GROUP BY EXTRACT(YEAR FROM order_date)
+ORDER BY order_year;
+
+
+
+-- =====================================
+-- Question 22
+-- What is the actual average order value?
+
+-- Key Findings:
+-- Actual Average Order Value: $458.61
+--
+-- Business Insight:
+-- The true average order value is much higher than the earlier
+-- row-level average because many orders contain multiple products.
+-- =====================================
+
+WITH order_totals AS (
+    SELECT
+        order_id,
+        SUM(sales) AS order_sales
+    FROM superstore_orders
+    GROUP BY order_id
+)
+
+SELECT
+    ROUND(AVG(order_sales), 2) AS actual_average_order_value
+FROM order_totals;
